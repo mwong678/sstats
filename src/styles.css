@@ -1,4 +1,10 @@
-.Welcome {
+.Dashboard {
   font-family: sans-serif;
+  text-align: center;
+}
+
+.track {
+  font-family: sans-serif;
+  font-size: 12px;
   text-align: center;
 }
