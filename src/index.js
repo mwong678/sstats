@@ -79,10 +79,15 @@ class Dashboard extends React.Component {
 
     for (var i = 0; i < tracks.items.length; i++){
       let curr = tracks.items[i];
-      songList.push({name: curr.name, artists: joinArtists(curr.artists), popularity: curr.popularity})
+      songList.push({
+                      name: curr.name, 
+                      artists: joinArtists(curr.artists), 
+                      popularity: curr.popularity,
+                      id: curr.id,
+                      link: curr.external_urls.spotify,
+                      picture: curr.album.images[2].url
+                    });
     }
-
-    songList.sort((a, b) => (b.popularity > a.popularity) ? 1 : -1);
     
     if (timeRange === 'short_term'){
       this.setState({ 'shortTermTracks': songList });
@@ -105,7 +110,7 @@ class Dashboard extends React.Component {
       const Tracks = ({tracks}) => (
         <>
           {tracks.map(tracks => (
-            <div className="track" key={tracks.name}>{tracks.name}, {tracks.artists} -> {tracks.popularity} <br /><br /></div>
+            <div className="track" key={tracks.id}><img alt="" src={tracks.picture} /> {tracks.name}, {tracks.artists} <br /><br /></div>
           ))}
         </>
       );
