@@ -1,6 +1,46 @@
+/*                   START GENERAL                  */
 .Dashboard {
   font-family: sans-serif;
   text-align: center;
+}
+
+a {
+  color: black;
+  text-decoration: none; /* no underline */
+}
+
+.numberTrackP{
+  font-family: sans-serif;
+  float: left;
+  font-size: 20px;
+  font-weight: bold;
+  margin: 42px 0 0 10px;
+}
+.topBarTitle{
+  display: inline-block;
+  padding: 5px;
+  width: 50%;
+}
+
+.topBar {
+  display: inline-block;
+  padding: 5px;
+  width: 15%;
+}
+
+.topBarSelected {
+  display: inline-block;
+  padding: 5px;
+  background-color:blue;
+  width: 15%;
+}
+
+/*                   END GENERAL                  */
+
+
+/*                   START TRACKS                  */
+.trackSection {
+  display: block;
 }
 
 .trackDiv {
@@ -27,20 +67,93 @@
   font-weight: bold;
 }
 
-.artistNameP {
+.songArtistNameP {
   font-size: 12px;
 }
 
-.numberP{
+.trackHeaderDiv {
+  text-align: center;
+  padding-top: 50px;
+}
+
+.timeRangeTrackDiv {
+  float: center;
+}
+
+.timeRangeTrack{
+  display: inline-block;
+  padding: 5px;
+}
+
+.timeRangeTrackSelected{
+  display: inline-block;
+  padding: 5px;
+  background-color:greenyellow;
+}
+/*                   END TRACKS                  */
+
+
+
+
+/*                   START ARTISTS                  */
+.artistSection {
+  display: none;
+}
+
+.artistDiv {
+  border: 1px solid #000000;
+  width: 80%;
+  margin: auto;
+  overflow: auto;
+}
+
+.artistImg {
+  float: left;
+  background: #000000;
+  margin: 20px 20px 20px 20px;
+}
+
+.artistInfoDiv {
+  font-family: sans-serif;
+  text-align: left;
+  margin: 28px 0 0 0;
+}
+
+.artistNameP {
+  font-size: 20px;
+  font-weight: bold;
+}
+
+.timeRangeArtistDiv {
+  float: center;
+}
+
+.timeRangeArtist{
+  display: inline-block;
+  padding: 5px;
+}
+
+.timeRangeArtistSelected{
+  display: inline-block;
+  padding: 5px;
+  background-color:greenyellow;
+}
+
+.numberArtistP{
   font-family: sans-serif;
   float: left;
   font-size: 20px;
   font-weight: bold;
-  margin: 42px 0 0 10px;
+  margin: 80px 0 0 10px;
 }
 
+/*                   END ARTISTS                  */
+
+
+/* MOBILE */
 @media screen and (max-width: 1000px) {
 
+  /*                   START TRACKS                  */
   .trackDiv {
     border: 1px solid #000000;
     width: 100%;
@@ -53,7 +166,23 @@
     font-weight: bold;
   }
 
-  .artistNameP {
+  .songArtistNameP {
     font-size: 10px;
   }
+
+  /*                   END TRACKS                  */
+
+  /*                   START ARTISTS                  */
+  .artistDiv {
+    border: 1px solid #000000;
+    width: 100%;
+    margin: auto;
+    overflow: auto;
+  }
+  
+  .artistNameP {
+    font-size: 14px;
+    font-weight: bold;
+  }
+   /*                   END ARTISTS                  */
 }

@@ -4,7 +4,7 @@ const request = require('request-promise'),
 function getTopTracks(token, timeRange){
   const queryURL = querystring.stringify({
    time_range: timeRange,
-   limit: 50
+   limit: 20
   });
 
   let options = {
@@ -21,11 +21,11 @@ function getTopTracks(token, timeRange){
 function getTopArtists(token, timeRange){
   const queryURL = querystring.stringify({
    time_range: timeRange,
-   limit: 50
+   limit: 20
   });
 
   let options = {
-    uri: 'https://api.spotify.com/v1/me/top/artists' + queryURL,
+    uri: 'https://api.spotify.com/v1/me/top/artists?' + queryURL,
 
     headers: {
       'Authorization': 'Bearer ' + token
