@@ -3,8 +3,57 @@
   text-align: center;
 }
 
-.track {
+.trackDiv {
+  border: 1px solid #000000;
+  width: 80%;
+  margin: auto;
+  overflow: auto;
+}
+
+.songImg {
+  float: left;
+  background: #000000;
+  margin: 20px 20px 20px 20px;
+}
+
+.songInfoDiv {
   font-family: sans-serif;
+  text-align: left;
+  margin: 28px 0 0 0;
+}
+
+.songNameP {
+  font-size: 14px;
+  font-weight: bold;
+}
+
+.artistNameP {
   font-size: 12px;
-  text-align: center;
+}
+
+.numberP{
+  font-family: sans-serif;
+  float: left;
+  font-size: 20px;
+  font-weight: bold;
+  margin: 42px 0 0 10px;
+}
+
+@media screen and (max-width: 1000px) {
+
+  .trackDiv {
+    border: 1px solid #000000;
+    width: 100%;
+    margin: auto;
+    overflow: auto;
+  }
+
+  .songNameP {
+    font-size: 12px;
+    font-weight: bold;
+  }
+
+  .artistNameP {
+    font-size: 10px;
+  }
 }

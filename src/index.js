@@ -8,9 +8,9 @@ const querystring = require('querystring'),
       properties = require('./properties.json');
 
 const clientID = properties.clientID,
-      clientSecret = properties.clientSecret,
       redirectURI = properties.redirectURILocal,
       scope = 'user-top-read';
+      //clientSecret = properties.clientSecret,
 
 const rootElement = document.getElementById('root');
 const accessTokenField = 'access_token=',
@@ -28,6 +28,7 @@ class Dashboard extends React.Component {
     }
     this.state = {
       'accessToken': accessToken,
+      'isTrack': true,
       'shortTermTracks': [],
       'mediumTermTracks': [],
       'longTermTracks': []
@@ -80,15 +81,15 @@ class Dashboard extends React.Component {
     for (var i = 0; i < tracks.items.length; i++){
       let curr = tracks.items[i];
       songList.push({
-                      name: curr.name, 
-                      artists: joinArtists(curr.artists), 
+                      name: curr.name,
+                      artists: joinArtists(curr.artists),
                       popularity: curr.popularity,
                       id: curr.id,
                       link: curr.external_urls.spotify,
                       picture: curr.album.images[2].url
                     });
     }
-    
+
     if (timeRange === 'short_term'){
       this.setState({ 'shortTermTracks': songList });
     }else if (timeRange === 'medium_term'){
@@ -107,31 +108,42 @@ class Dashboard extends React.Component {
         </div>
       );
     }else{
-      const Tracks = ({tracks}) => (
-        <>
-          {tracks.map(tracks => (
-            <div className="track" key={tracks.id}><img alt="" src={tracks.picture} /> {tracks.name}, {tracks.artists} <br /><br /></div>
-          ))}
-        </>
-      );
+      if (this.state.isTrack){
+        const Tracks = ({tracks}) => (
+          <>
+            {tracks.map((tracks, index) => (
+              <div className="trackDiv" key={tracks.id}>
+                <p className="numberP">{index + 1}.</p>
+                <img className="songImg" alt="" src={tracks.picture} />
+                <div className="songInfoDiv">
+                  <p className="songNameP">{tracks.name}</p>
+                  <p className="artistNameP">{tracks.artists}</p>
+                </div>
+              </div>
+            ))}
+          </>
+        );
 
-      return (
-        <div className='Dashboard'>
-          <h1>Spotify Statistics</h1>
-          <h3>Short Term Tracks (4 weeks)</h3>
-          <div>
-            <Tracks tracks={this.state.shortTermTracks} />
+        return (
+          <div className='Dashboard'>
+            <h1>Spotify Statistics</h1>
+
+            <h3>Short Term Tracks (4 weeks)</h3>
+            <div>
+              <Tracks tracks={this.state.shortTermTracks} />
+            </div>
+            <h3>Medium Term Tracks (6 months)</h3>
+            <div>
+              <Tracks tracks={this.state.mediumTermTracks} />
+            </div>
+            <h3>Long Term Tracks (All Time)</h3>
+            <div>
+              <Tracks tracks={this.state.longTermTracks} />
+            </div>
           </div>
-          <h3>Medium Term Tracks (6 months)</h3>
-          <div>
-            <Tracks tracks={this.state.mediumTermTracks} />
-          </div>
-          <h3>Long Term Tracks (Couple Years)</h3>
-          <div>
-            <Tracks tracks={this.state.longTermTracks} />
-          </div>
-        </div>
-      );
+        );
+      }
+
     }
   }
 
