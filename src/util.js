@@ -1,6 +1,12 @@
+const querystring = require('querystring'),
+      properties = require('./properties.json'),
+      clientID = properties.clientID,
+      redirectURI = properties.redirectURILocal,
+      scope = 'user-top-read',
+      accessTokenField = 'access_token=',
+      tokenTypeField = '&token_type';
 
-
-function joinArtists(arrayArtists){
+ const joinArtists = (arrayArtists) => {
   let artists = [];
   for (let i = 0;i < arrayArtists.length; i++){
     artists.push(arrayArtists[i].name);
@@ -8,4 +14,34 @@ function joinArtists(arrayArtists){
   return artists.join(', ');
 }
 
-export {joinArtists};
+const generateRandomString = (length) => {
+  let text = '';
+  const possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+
+  for (let i = 0; i < length; i++) {
+   text += possible.charAt(Math.floor(Math.random() * possible.length));
+  }
+  return text;
+}
+
+const getAuthURL = () => {
+  return 'https://accounts.spotify.com/authorize?' +
+  querystring.stringify({
+   response_type: 'token',
+   client_id: clientID,
+   scope: scope,
+   redirect_uri: redirectURI,
+   state: generateRandomString(16),
+   show_dialog: true
+  });
+}
+
+const getAccessToken = (uri) => {
+  if (!uri.includes(accessTokenField)){
+    return '';
+  }
+  return uri.substring(uri.indexOf(accessTokenField) +
+                accessTokenField.length, uri.indexOf(tokenTypeField));
+}
+
+export {joinArtists, getAccessToken, getAuthURL, generateRandomString};

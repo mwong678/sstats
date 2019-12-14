@@ -2,29 +2,17 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './styles.css';
 import {getTopTracks, getTopArtists} from './spotify'
-import {joinArtists} from './util'
-
-const querystring = require('querystring'),
-      properties = require('./properties.json');
-
-const clientID = properties.clientID,
-      redirectURI = properties.redirectURILocal,
-      scope = 'user-top-read';
-      //clientSecret = properties.clientSecret,
+import {joinArtists, getAccessToken, getAuthURL} from './util'
 
 const rootElement = document.getElementById('root');
-const accessTokenField = 'access_token=',
-      tokenTypeField = '&token_type';
 
 class Dashboard extends React.Component {
   constructor(){
     super();
+
     let currentURI = window.location.href,
-        accessToken = '';
-    if (currentURI.includes(accessTokenField)){
-      accessToken = currentURI.substring(currentURI.indexOf(accessTokenField) +
-                    accessTokenField.length, currentURI.indexOf(tokenTypeField));
-    }
+        accessToken = getAccessToken(currentURI);
+
     this.state = {
       'accessToken': accessToken,
       'currTopBar': 'tracks',
@@ -53,27 +41,6 @@ class Dashboard extends React.Component {
       this.getArtists('medium_term');
       this.getArtists('long_term');
     }
-  }
-  generateRandomString = (length) => {
-    let text = '';
-    const possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-
-    for (let i = 0; i < length; i++) {
-     text += possible.charAt(Math.floor(Math.random() * possible.length));
-    }
-    return text;
-  }
-
-  getAuthURL = () => {
-    return 'https://accounts.spotify.com/authorize?' +
-    querystring.stringify({
-     response_type: 'token',
-     client_id: clientID,
-     scope: scope,
-     redirect_uri: redirectURI,
-     state: this.generateRandomString(16),
-     show_dialog: true
-    });
   }
 
   getTracks = async (timeRange) => {
@@ -138,7 +105,7 @@ class Dashboard extends React.Component {
     document.getElementsByClassName('timeRangeTrackSelected')[0].setAttribute('class', 'timeRangeTrack');
     //set new highlighted class
     e.target.setAttribute('class', 'timeRangeTrackSelected');
-    
+
     this.setState({ 'currTrackTimeRange': selectedRange });
   }
 
@@ -150,7 +117,7 @@ class Dashboard extends React.Component {
     document.getElementsByClassName('timeRangeArtistSelected')[0].setAttribute('class', 'timeRangeTrack');
     //set new highlighted class
     e.target.setAttribute('class', 'timeRangeArtistSelected');
-    
+
     this.setState({ 'currArtistTimeRange': selectedRange });
   }
 
@@ -171,7 +138,7 @@ class Dashboard extends React.Component {
       document.getElementsByClassName('artistSection')[0].style.display = 'block';
       document.getElementsByClassName('trackSection')[0].style.display = 'none';
     }
-    
+
     this.setState({ 'currTopBar': selectedMode });
   }
 
@@ -180,7 +147,7 @@ class Dashboard extends React.Component {
       return (
         <div className='Dashboard'>
           <h1>Welcome to SStats</h1>
-          <a href={this.getAuthURL()}>Get Spotify Stats</a>
+          <a href={getAuthURL()}>Get Spotify Stats</a>
         </div>
       );
     }else{
@@ -212,15 +179,15 @@ class Dashboard extends React.Component {
             ))}
           </>
         );
-        
+
         return (
           <div className='Dashboard'>
             <div className='topBarSection'>
-              <div className='topBarTitle'><h2>Spotify Statistics</h2></div>
-              <a  href='#' value='tracks' onClick={this.topBarSwitch.bind(this)}>
+              <div className='topBarTitle'><h3>Spotify Statistics</h3></div>
+              <a  href='/#' value='tracks' onClick={this.topBarSwitch.bind(this)}>
                   <div className='topBarSelected'>Tracks</div>
               </a>
-              <a  href='#' value='artists' onClick={this.topBarSwitch.bind(this)}>
+              <a  href='/#' value='artists' onClick={this.topBarSwitch.bind(this)}>
                 <div className='topBar'>Artists</div>
               </a>
             </div>
@@ -229,13 +196,13 @@ class Dashboard extends React.Component {
                 <h2>Top Tracks</h2>
               </div>
               <div className='timeRangeTrackDiv'>
-                  <a  href='#' value="short_term.track" onClick={this.trackSwitch.bind(this)}>
+                  <a  href='/#' value="short_term.track" onClick={this.trackSwitch.bind(this)}>
                     <div className='timeRangeTrack'>4 Weeks</div>
                   </a>
-                  <a  href='#' value="medium_term.track" onClick={this.trackSwitch.bind(this)}>
+                  <a  href='/#' value="medium_term.track" onClick={this.trackSwitch.bind(this)}>
                     <div className='timeRangeTrackSelected'>6 Months</div>
                   </a>
-                  <a href='#' value="long_term.track" onClick={this.trackSwitch.bind(this)}>
+                  <a href='/#' value="long_term.track" onClick={this.trackSwitch.bind(this)}>
                     <div className='timeRangeTrack'>All Time</div>
                   </a>
               </div>
@@ -251,13 +218,13 @@ class Dashboard extends React.Component {
                 <h2>Top Artists</h2>
               </div>
               <div className='timeRangeArtistDiv'>
-                  <a  href='#' value="short_term.artist" onClick={this.artistSwitch.bind(this)}>
+                  <a  href='/#' value="short_term.artist" onClick={this.artistSwitch.bind(this)}>
                     <div className='timeRangeArtist'>4 Weeks</div>
                   </a>
-                  <a  href='#' value="medium_term.artist" onClick={this.artistSwitch.bind(this)}>
+                  <a  href='/#' value="medium_term.artist" onClick={this.artistSwitch.bind(this)}>
                     <div className='timeRangeArtistSelected'>6 Months</div>
                   </a>
-                  <a href='#' value="long_term.artist" onClick={this.artistSwitch.bind(this)}>
+                  <a href='/#' value="long_term.artist" onClick={this.artistSwitch.bind(this)}>
                     <div className='timeRangeArtist'>All Time</div>
                   </a>
               </div>

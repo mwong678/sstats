@@ -4,7 +4,7 @@ const request = require('request-promise'),
 function getTopTracks(token, timeRange){
   const queryURL = querystring.stringify({
    time_range: timeRange,
-   limit: 20
+   limit: 50
   });
 
   let options = {
@@ -21,7 +21,7 @@ function getTopTracks(token, timeRange){
 function getTopArtists(token, timeRange){
   const queryURL = querystring.stringify({
    time_range: timeRange,
-   limit: 20
+   limit: 50
   });
 
   let options = {

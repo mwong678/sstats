@@ -1,6 +1,6 @@
 /*                   START GENERAL                  */
 .Dashboard {
-  font-family: sans-serif;
+  font-family: 'Muli','Roboto', sans-serif;
   text-align: center;
 }
 
@@ -10,16 +10,16 @@ a {
 }
 
 .numberTrackP{
-  font-family: sans-serif;
   float: left;
   font-size: 20px;
-  font-weight: bold;
   margin: 42px 0 0 10px;
 }
+
 .topBarTitle{
   display: inline-block;
   padding: 5px;
   width: 50%;
+  text-align: left;
 }
 
 .topBar {
@@ -28,14 +28,27 @@ a {
   width: 15%;
 }
 
+.topBar:hover {
+  display: inline-block;
+  padding: 5px;
+  width: 15%;
+  background-color: #a2bbab;
+}
+
 .topBarSelected {
   display: inline-block;
   padding: 5px;
-  background-color:blue;
+  background-color: #a2bbab;
   width: 15%;
+  height: 100%;
 }
 
-/*                   END GENERAL                  */
+.topBarSection {
+  background-color: #EEEEEE;
+  font-weight: 100;
+}
+
+/*         75887c          END GENERAL  9eb8a7                */
 
 
 /*                   START TRACKS                  */
@@ -57,14 +70,12 @@ a {
 }
 
 .songInfoDiv {
-  font-family: sans-serif;
   text-align: left;
   margin: 28px 0 0 0;
 }
 
 .songNameP {
   font-size: 14px;
-  font-weight: bold;
 }
 
 .songArtistNameP {
@@ -73,7 +84,7 @@ a {
 
 .trackHeaderDiv {
   text-align: center;
-  padding-top: 50px;
+  padding: 25px 0 25px 0;
 }
 
 .timeRangeTrackDiv {
@@ -85,10 +96,16 @@ a {
   padding: 5px;
 }
 
+.timeRangeTrack:hover{
+  display: inline-block;
+  padding: 5px;
+  background-color: #a2bbab;
+}
+
 .timeRangeTrackSelected{
   display: inline-block;
   padding: 5px;
-  background-color:greenyellow;
+  background-color: #a2bbab;
 }
 /*                   END TRACKS                  */
 
@@ -110,41 +127,52 @@ a {
 .artistImg {
   float: left;
   background: #000000;
+  height:64px;
+  width:64px;
   margin: 20px 20px 20px 20px;
 }
 
 .artistInfoDiv {
-  font-family: sans-serif;
   text-align: left;
   margin: 28px 0 0 0;
 }
 
 .artistNameP {
   font-size: 20px;
-  font-weight: bold;
 }
 
 .timeRangeArtistDiv {
   float: center;
 }
 
+.artistHeaderDiv {
+  text-align: center;
+  padding: 25px 0 25px 0;
+}
+
+
 .timeRangeArtist{
   display: inline-block;
   padding: 5px;
 }
 
+.timeRangeArtist:hover{
+  display: inline-block;
+  padding: 5px;
+  background-color: #a2bbab;
+}
+
 .timeRangeArtistSelected{
   display: inline-block;
   padding: 5px;
-  background-color:greenyellow;
+  background-color: #a2bbab;
 }
 
 .numberArtistP{
-  font-family: sans-serif;
   float: left;
   font-size: 20px;
-  font-weight: bold;
-  margin: 80px 0 0 10px;
+  font-weight: 300;
+  margin: 42px 0 0 10px;
 }
 
 /*                   END ARTISTS                  */
@@ -163,7 +191,6 @@ a {
 
   .songNameP {
     font-size: 12px;
-    font-weight: bold;
   }
 
   .songArtistNameP {
@@ -179,10 +206,9 @@ a {
     margin: auto;
     overflow: auto;
   }
-  
+
   .artistNameP {
     font-size: 14px;
-    font-weight: bold;
   }
    /*                   END ARTISTS                  */
 }
