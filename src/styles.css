@@ -4,6 +4,28 @@
   text-align: center;
 }
 
+.fade {
+  -webkit-animation: fade 2s;
+  animation: fade 2s;
+  -moz-animation: fade 2s;
+  -o-animation: fade 2s;
+}
+
+#welcome {
+  margin: 0;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  -ms-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
+  display:block;
+}
+
+
+#app {
+  display:none;
+}
+
 a {
   color: black;
   text-decoration: none; /* no underline */
@@ -48,7 +70,27 @@ a {
   font-weight: 100;
 }
 
-/*         75887c          END GENERAL  9eb8a7                */
+@-webkit-keyframes fade {
+0% {opacity: 0};
+100% {opacity: 1};
+}
+
+@-moz-keyframes fade{
+  0% {opacity: 0};
+  100% {opacity: 1};
+}
+
+@keyframes fade {
+  0% {opacity: 0};
+  100% {opacity: 1};
+}
+
+@-o-keyframes fade {
+  0% {opacity: 0};
+  100% {opacity: 1};
+}
+
+/*                   END GENERAL                  */
 
 
 /*                   START TRACKS                  */

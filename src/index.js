@@ -27,7 +27,10 @@ class Dashboard extends React.Component {
         'short_term': [],
         'medium_term': [],
         'long_term': []
-      }
+      },
+      'welcome' : {display: 'block'},
+      'app' : {display: 'none'}
+
     };
   }
 
@@ -40,7 +43,23 @@ class Dashboard extends React.Component {
       this.getArtists('short_term');
       this.getArtists('medium_term');
       this.getArtists('long_term');
+
+      this.setState({ 'welcome': {display: 'none'}, 'app': {display: 'block'}});
+    }else{
+      this.setState({ 'welcome': {display: 'block'}, 'app': {display: 'none'}});
     }
+  }
+
+  componentDidUpdate(){
+    /*
+    if (this.state.accessToken !== ''){
+      document.getElementById('welcome').style.display = none;
+      document.getElementById('app').style.display = block;
+    }else{
+      document.getElementById('welcome').style.display = block;
+      document.getElementById('app').style.display = none;
+    }
+    */
   }
 
   getTracks = async (timeRange) => {
@@ -143,100 +162,97 @@ class Dashboard extends React.Component {
   }
 
   render(){
-    if (this.state.accessToken === ''){
-      return (
-        <div className='Dashboard'>
-          <h1>Welcome to SStats</h1>
-          <a href={getAuthURL()}>Get Spotify Stats</a>
+    const Tracks = ({tracks}) => (
+      <>
+        {tracks.map((tracks, index) => (
+          <div className="trackDiv" key={tracks.id}>
+            <p className="numberTrackP">{index + 1}.</p>
+            <img className="songImg" alt="" src={tracks.picture} />
+            <div className="songInfoDiv">
+              <p className="songNameP">{tracks.name}</p>
+              <p className="songArtistNameP">{tracks.artists}</p>
+            </div>
+          </div>
+        ))}
+      </>
+    );
+
+    const Artists = ({artists}) => (
+      <>
+        {artists.map((artists, index) => (
+          <div className="artistDiv" key={artists.id}>
+            <p className="numberArtistP">{index + 1}.</p>
+            <img className="artistImg" alt="" src={artists.picture} />
+            <div className="artistInfoDiv">
+              <p className="artistNameP">{artists.name}</p>
+            </div>
+          </div>
+        ))}
+      </>
+    );
+
+    return (
+      <div className='Dashboard'>
+        <div className='fade' id='welcome' style={this.state.welcome} >
+          <h1>Welcome to Statisfied</h1>
+          <a href={getAuthURL()}><div className='spotifyAuth'>Get Spotify Stats</div></a>
         </div>
-      );
-    }else{
-        const Tracks = ({tracks}) => (
-          <>
-            {tracks.map((tracks, index) => (
-              <div className="trackDiv" key={tracks.id}>
-                <p className="numberTrackP">{index + 1}.</p>
-                <img className="songImg" alt="" src={tracks.picture} />
-                <div className="songInfoDiv">
-                  <p className="songNameP">{tracks.name}</p>
-                  <p className="songArtistNameP">{tracks.artists}</p>
-                </div>
-              </div>
-            ))}
-          </>
-        );
-
-        const Artists = ({artists}) => (
-          <>
-            {artists.map((artists, index) => (
-              <div className="artistDiv" key={artists.id}>
-                <p className="numberArtistP">{index + 1}.</p>
-                <img className="artistImg" alt="" src={artists.picture} />
-                <div className="artistInfoDiv">
-                  <p className="artistNameP">{artists.name}</p>
-                </div>
-              </div>
-            ))}
-          </>
-        );
-
-        return (
-          <div className='Dashboard'>
-            <div className='topBarSection'>
-              <div className='topBarTitle'><h3>Spotify Statistics</h3></div>
-              <a  href='/#' value='tracks' onClick={this.topBarSwitch.bind(this)}>
-                  <div className='topBarSelected'>Tracks</div>
-              </a>
-              <a  href='/#' value='artists' onClick={this.topBarSwitch.bind(this)}>
-                <div className='topBar'>Artists</div>
-              </a>
+        <div className='fade' id='app'  style={this.state.app}>
+          <div className='topBarSection'>
+            <div className='topBarTitle'><h3>Spotify Statistics</h3></div>
+            <a  href='/#' value='tracks' onClick={this.topBarSwitch.bind(this)}>
+                <div className='topBarSelected'>Tracks</div>
+            </a>
+            <a  href='/#' value='artists' onClick={this.topBarSwitch.bind(this)}>
+              <div className='topBar'>Artists</div>
+            </a>
+          </div>
+          <div className='trackSection'>
+            <div className='trackHeaderDiv'>
+              <h2>Top Tracks</h2>
             </div>
-            <div className='trackSection'>
-              <div className='trackHeaderDiv'>
-                <h2>Top Tracks</h2>
-              </div>
-              <div className='timeRangeTrackDiv'>
-                  <a  href='/#' value="short_term.track" onClick={this.trackSwitch.bind(this)}>
-                    <div className='timeRangeTrack'>4 Weeks</div>
-                  </a>
-                  <a  href='/#' value="medium_term.track" onClick={this.trackSwitch.bind(this)}>
-                    <div className='timeRangeTrackSelected'>6 Months</div>
-                  </a>
-                  <a href='/#' value="long_term.track" onClick={this.trackSwitch.bind(this)}>
-                    <div className='timeRangeTrack'>All Time</div>
-                  </a>
-              </div>
-              <div className='trackContainer'>
-                <div>
-                  <Tracks tracks={this.state.tracks[this.state.currTrackTimeRange]} />
-                </div>
-              </div>
+            <div className='timeRangeTrackDiv'>
+                <a  href='/#' value="short_term.track" onClick={this.trackSwitch.bind(this)}>
+                  <div className='timeRangeTrack'>4 Weeks</div>
+                </a>
+                <a  href='/#' value="medium_term.track" onClick={this.trackSwitch.bind(this)}>
+                  <div className='timeRangeTrackSelected'>6 Months</div>
+                </a>
+                <a href='/#' value="long_term.track" onClick={this.trackSwitch.bind(this)}>
+                  <div className='timeRangeTrack'>All Time</div>
+                </a>
             </div>
-
-            <div className='artistSection'>
-              <div className='artistHeaderDiv'>
-                <h2>Top Artists</h2>
-              </div>
-              <div className='timeRangeArtistDiv'>
-                  <a  href='/#' value="short_term.artist" onClick={this.artistSwitch.bind(this)}>
-                    <div className='timeRangeArtist'>4 Weeks</div>
-                  </a>
-                  <a  href='/#' value="medium_term.artist" onClick={this.artistSwitch.bind(this)}>
-                    <div className='timeRangeArtistSelected'>6 Months</div>
-                  </a>
-                  <a href='/#' value="long_term.artist" onClick={this.artistSwitch.bind(this)}>
-                    <div className='timeRangeArtist'>All Time</div>
-                  </a>
-              </div>
-              <div className='artistContainer'>
-                <div>
-                  <Artists artists={this.state.artists[this.state.currArtistTimeRange]} />
-                </div>
+            <div className='trackContainer'>
+              <div>
+                <Tracks tracks={this.state.tracks[this.state.currTrackTimeRange]} />
               </div>
             </div>
           </div>
-        );
-    }
+
+          <div className='artistSection'>
+            <div className='artistHeaderDiv'>
+              <h2>Top Artists</h2>
+            </div>
+            <div className='timeRangeArtistDiv'>
+                <a  href='/#' value="short_term.artist" onClick={this.artistSwitch.bind(this)}>
+                  <div className='timeRangeArtist'>4 Weeks</div>
+                </a>
+                <a  href='/#' value="medium_term.artist" onClick={this.artistSwitch.bind(this)}>
+                  <div className='timeRangeArtistSelected'>6 Months</div>
+                </a>
+                <a href='/#' value="long_term.artist" onClick={this.artistSwitch.bind(this)}>
+                  <div className='timeRangeArtist'>All Time</div>
+                </a>
+            </div>
+            <div className='artistContainer'>
+              <div>
+                <Artists artists={this.state.artists[this.state.currArtistTimeRange]} />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
   }
 
 }
