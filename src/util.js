@@ -1,5 +1,5 @@
 const querystring = require('querystring'),
-      isProduction = (process.env.isProduction === 'true'),
+      isProduction = (process.env.isProduction == 'true'),
       properties = isProduction ? '' : require('./properties.json'),
       clientID = isProduction ? process.env.clientID: properties.clientID,
       redirectURI = isProduction ? process.env.redirectURI: properties.redirectURI,
