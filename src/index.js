@@ -194,7 +194,7 @@ class Dashboard extends React.Component {
     return (
       <div className='Dashboard'>
         <div className='fade' id='welcome' style={this.state.welcome} >
-          <h1>Welcome to Statisfied</h1>
+          <h1>Welcome to Statisfy</h1>
           <a href={getAuthURL()}><div className='spotifyAuth'>Get Spotify Stats</div></a>
         </div>
         <div className='fade' id='app'  style={this.state.app}>
