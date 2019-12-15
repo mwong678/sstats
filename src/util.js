@@ -1,8 +1,6 @@
 const querystring = require('querystring'),
-      isProduction = (process.env.isProduction == 'true'),
-      properties = isProduction ? '' : require('./properties.json'),
-      clientID = isProduction ? process.env.clientID: properties.clientID,
-      redirectURI = isProduction ? process.env.redirectURI: properties.redirectURI,
+      clientID = process.env.REACT_APP_CLIENT_ID,
+      redirectURI = process.env.REACT_APP_REDIRECT_URI,
       scope = 'user-top-read',
       accessTokenField = 'access_token=',
       tokenTypeField = '&token_type';
