@@ -53,18 +53,6 @@ class Dashboard extends React.Component {
     }
   }
 
-  componentDidUpdate(){
-    /*
-    if (this.state.accessToken !== ''){
-      document.getElementById('welcome').style.display = none;
-      document.getElementById('app').style.display = block;
-    }else{
-      document.getElementById('welcome').style.display = block;
-      document.getElementById('app').style.display = none;
-    }
-    */
-  }
-
   userProfile = async () => {
     const profile = await getUserProfile(this.state.accessToken);
     this.setState({'displayName': profile.display_name});
@@ -202,7 +190,7 @@ class Dashboard extends React.Component {
     return (
       <div className='Dashboard'>
         <div className='fade' id='welcome' style={this.state.welcome} >
-          <h1>Welcome to Statisfied</h1>
+          <h1>Welcome to SpotStats</h1>
           <a href={getAuthURL()}>
             <div className='spotifyAuth'>Get Spotify Stats</div>
           </a>
