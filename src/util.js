@@ -1,7 +1,8 @@
 const querystring = require('querystring'),
-      properties = (process.env.PORT) ? '' : require('./properties.json'),
-      clientID = (process.env.PORT) ? process.env.clientID: properties.clientID,
-      redirectURI = (process.env.PORT) ? process.env.redirectURI: properties.redirectURI,
+      isProduction = (process.env.NODE_ENV === 'production'),
+      properties = isProduction ? '' : require('./properties.json'),
+      clientID = isProduction ? process.env.clientID: properties.clientID,
+      redirectURI = isProduction ? process.env.redirectURI: properties.redirectURI,
       scope = 'user-top-read',
       accessTokenField = 'access_token=',
       tokenTypeField = '&token_type';
