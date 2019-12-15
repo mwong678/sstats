@@ -76,7 +76,7 @@ class Dashboard extends React.Component {
                       popularity: curr.popularity,
                       id: curr.id,
                       link: curr.external_urls.spotify,
-                      picture: curr.album.images[2].url
+                      picture: (curr.album.images.length > 0) ? curr.album.images[2].url : ''
                     });
     }
 
@@ -103,7 +103,7 @@ class Dashboard extends React.Component {
                       popularity: curr.popularity,
                       genres: curr.genres,
                       link: curr.external_urls.spotify,
-                      picture: curr.images[2].url
+                      picture: (curr.images.length > 0) ? curr.images[2].url : ''
                     });
     }
 
