@@ -1,5 +1,5 @@
 {
-  "name": "Statisfy",
+  "name": "SpotStats",
   "version": "1.0.0",
   "description": "",
   "keywords": [],
@@ -17,8 +17,8 @@
     "typescript": "3.3.3"
   },
   "scripts": {
-    "local": "env-cmd -f .env.development react-scripts start",
-    "start": "env-cmd -f .env.production react-scripts start",
+    "local": "react-scripts start",
+    "start": "serve -s build",
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject"

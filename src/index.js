@@ -103,7 +103,7 @@ class Dashboard extends React.Component {
                       popularity: curr.popularity,
                       genres: curr.genres,
                       link: curr.external_urls.spotify,
-                      picture: (curr.images.length > 0) ? curr.images[2].url : ''
+                      picture: (curr.images.length > 0) ? curr.images[1].url : ''
                     });
     }
 
