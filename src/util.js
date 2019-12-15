@@ -1,3 +1,4 @@
+console.log(process.env.NODE_ENV);
 const querystring = require('querystring'),
       clientID = process.env.REACT_APP_CLIENT_ID,
       redirectURI = process.env.REACT_APP_REDIRECT_URI,
