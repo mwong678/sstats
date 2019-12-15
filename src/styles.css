@@ -1,5 +1,6 @@
 /*                   START GENERAL                  */
-.Dashboard {
+body {
+  background-color: #EEEEEE;
   font-family: 'Muli','Roboto', sans-serif;
   text-align: center;
 }
@@ -18,9 +19,15 @@
   left: 50%;
   -ms-transform: translate(-50%, -50%);
   transform: translate(-50%, -50%);
-  display:block;
+  display: block;
 }
 
+.spotifyAuth {
+    background-color: #a2bbab;
+    width: 50%;
+    margin: 0 auto;
+    border-radius: 4px;
+}
 
 #app {
   display:none;

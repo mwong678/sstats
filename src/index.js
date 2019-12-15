@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './styles.css';
-import {getTopTracks, getTopArtists} from './spotify'
+import {getTopTracks, getTopArtists, getUserProfile} from './spotify'
 import {joinArtists, getAccessToken, getAuthURL} from './util'
 
 const rootElement = document.getElementById('root');
@@ -29,7 +29,8 @@ class Dashboard extends React.Component {
         'long_term': []
       },
       'welcome' : {display: 'block'},
-      'app' : {display: 'none'}
+      'app' : {display: 'none'},
+      'displayName': ''
 
     };
   }
@@ -43,6 +44,8 @@ class Dashboard extends React.Component {
       this.getArtists('short_term');
       this.getArtists('medium_term');
       this.getArtists('long_term');
+
+      this.userProfile();
 
       this.setState({ 'welcome': {display: 'none'}, 'app': {display: 'block'}});
     }else{
@@ -60,6 +63,11 @@ class Dashboard extends React.Component {
       document.getElementById('app').style.display = none;
     }
     */
+  }
+
+  userProfile = async () => {
+    const profile = await getUserProfile(this.state.accessToken);
+    this.setState({'displayName': profile.display_name});
   }
 
   getTracks = async (timeRange) => {
@@ -195,11 +203,13 @@ class Dashboard extends React.Component {
       <div className='Dashboard'>
         <div className='fade' id='welcome' style={this.state.welcome} >
           <h1>Welcome to Statisfied</h1>
-          <a href={getAuthURL()}><div className='spotifyAuth'>Get Spotify Stats</div></a>
+          <a href={getAuthURL()}>
+            <div className='spotifyAuth'>Get Spotify Stats</div>
+          </a>
         </div>
         <div className='fade' id='app'  style={this.state.app}>
           <div className='topBarSection'>
-            <div className='topBarTitle'><h3>Spotify Statistics</h3></div>
+            <div className='topBarTitle'><h3>Spotify Statistics for {this.state.displayName}</h3></div>
             <a  href='/#' value='tracks' onClick={this.topBarSwitch.bind(this)}>
                 <div className='topBarSelected'>Tracks</div>
             </a>
