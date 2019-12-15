@@ -1,0 +1,4 @@
+{
+  "clientID": "<CLIENT_ID>",
+  "redirectURI" : "<CALLBACK>"
+}
