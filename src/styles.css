@@ -12,6 +12,22 @@ body {
   -o-animation: fade 2s;
 }
 
+.fadeInOut {
+  -webkit-animation: fadeInOut 6s;
+  animation: fadeInOut 6s;
+  -moz-animation: fadeInOut 6s;
+  -o-animation: fadeInOut 6s;
+}
+
+.sectionHeaderDiv {
+  text-align: center;
+  padding: 25px 0 25px 0;
+}
+
+#loading{
+    display:none;
+}
+
 #welcome {
   margin: 0;
   position: absolute;
@@ -47,20 +63,20 @@ a {
 .topBarTitle{
   display: inline-block;
   padding: 5px;
-  width: 50%;
+  width: 40%;
   text-align: left;
 }
 
 .topBar {
   display: inline-block;
   padding: 5px;
-  width: 15%;
+  width: 13%;
 }
 
 .topBar:hover {
   display: inline-block;
   padding: 5px;
-  width: 15%;
+  width: 13%;
   background-color: #a2bbab;
 }
 
@@ -68,7 +84,7 @@ a {
   display: inline-block;
   padding: 5px;
   background-color: #a2bbab;
-  width: 15%;
+  width: 13%;
   height: 100%;
 }
 
@@ -95,6 +111,38 @@ a {
 @-o-keyframes fade {
   0% {opacity: 0};
   100% {opacity: 1};
+}
+
+@-webkit-keyframes fadeInOut {
+0% {opacity: .2};
+25% {opacity: 1};
+0% {opacity: .2};
+75% {opacity: 1};
+0% {opacity: .2};
+}
+
+@-moz-keyframes fadeInOut{
+  0% {opacity: .2};
+  25% {opacity: 1};
+  0% {opacity: .2};
+  75% {opacity: 1};
+  0% {opacity: .2};
+}
+
+@keyframes fadeInOut {
+  0% {opacity: .2};
+  25% {opacity: 1};
+  0% {opacity: .2};
+  75% {opacity: 1};
+  0% {opacity: .2};
+}
+
+@-o-keyframes fadeInOut {
+  0% {opacity: .2};
+  25% {opacity: 1};
+  0% {opacity: .2};
+  75% {opacity: 1};
+  0% {opacity: .2};
 }
 
 /*                   END GENERAL                  */
@@ -129,11 +177,6 @@ a {
 
 .songArtistNameP {
   font-size: 12px;
-}
-
-.trackHeaderDiv {
-  text-align: center;
-  padding: 25px 0 25px 0;
 }
 
 .timeRangeTrackDiv {
@@ -194,11 +237,6 @@ a {
   float: center;
 }
 
-.artistHeaderDiv {
-  text-align: center;
-  padding: 25px 0 25px 0;
-}
-
 
 .timeRangeArtist{
   display: inline-block;
@@ -226,6 +264,12 @@ a {
 
 /*                   END ARTISTS                  */
 
+/*                   START STATS                  */
+.statSection {
+  display: none;
+}
+
+/*                   END STATS                  */
 
 /* MOBILE */
 @media screen and (max-width: 1000px) {

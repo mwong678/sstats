@@ -1,10 +1,12 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import Chart from 'chart.js';
 import './styles.css';
-import {getTopTracks, getTopArtists, getUserProfile} from './spotify'
-import {joinArtists, getAccessToken, getAuthURL} from './util'
+import {getTopTracks, getTopArtists, getUserProfile, getTrackStats} from './spotify'
+import {joinArtists, getAccessToken, getAuthURL, getRandomRGB} from './util'
 
-const rootElement = document.getElementById('root');
+const rootElement = document.getElementById('root'),
+      timeRanges = ['short_term', 'medium_term', 'long_term'];
 
 class Dashboard extends React.Component {
   constructor(){
@@ -15,9 +17,9 @@ class Dashboard extends React.Component {
 
     this.state = {
       'accessToken': accessToken,
-      'currTopBar': 'tracks',
       'currTrackTimeRange': 'medium_term',
       'currArtistTimeRange': 'medium_term',
+      'displayName': '',
       'tracks': {
         'short_term': [],
         'medium_term': [],
@@ -28,88 +30,175 @@ class Dashboard extends React.Component {
         'medium_term': [],
         'long_term': []
       },
+      'stats': {
+        'short_term': {
+          'energy': 0,
+          'tempo': 0,
+          'valence': 0
+        },
+        'medium_term' : {
+          'energy': 0,
+          'tempo': 0,
+          'valence': 0
+        },
+        'long_term': {
+          'energy': 0,
+          'tempo': 0,
+          'valence': 0
+        }
+      },
+      'genres': {},
       'welcome' : {display: 'block'},
       'app' : {display: 'none'},
-      'displayName': ''
-
+      'loading' : {display: 'none'},
+      'trackSection': {display: 'block'},
+      'artistSection': {display: 'none'},
+      'statSection': {display: 'none'}
     };
   }
 
-  componentDidMount(){
+  async componentDidMount(){
     if (this.state.accessToken !== ''){
-      this.getTracks('short_term');
-      this.getTracks('medium_term');
-      this.getTracks('long_term');
-
-      this.getArtists('short_term');
-      this.getArtists('medium_term');
-      this.getArtists('long_term');
+      this.setState({ 'loading': {display: 'block'}});
 
       this.userProfile();
-
+      await this.parseArtists();
+      await this.parseTracks();
+      this.initGenreChart(5);
       this.setState({ 'welcome': {display: 'none'}, 'app': {display: 'block'}});
     }else{
       this.setState({ 'welcome': {display: 'block'}, 'app': {display: 'none'}});
     }
   }
 
+  initGenreChart = (n) => {
+    let rgba = getRandomRGB(n),
+        topGenres = this.getTopGenres(5),
+        genreNames = topGenres.map(g => g[0]),
+        genreValues = topGenres.map(g => g[1]);
+    let genreChart = new Chart(document.getElementById('genreChart'), {
+        type: 'horizontalBar',
+        data: {
+          labels: genreNames,
+          datasets: [{
+              data: genreValues,
+              backgroundColor: rgba,
+              borderColor: rgba,
+              borderWidth: 1
+          }]
+      },
+      options: {
+          legend: {
+            display: false
+          },
+          scales: {
+              xAxes: [{
+                  ticks: {
+                      beginAtZero: true
+                  }
+              }]
+          }
+      }
+    });
+  };
+
+  getTopGenres = (n) => {
+    let toSort = [];
+    for (let genre in this.state.genres){
+      toSort.push([genre, this.state.genres[genre]]);
+    }
+    toSort.sort((a,b) => {return b[1] - a[1]});
+    return toSort.slice(0, n);
+  };
+
   userProfile = async () => {
     const profile = await getUserProfile(this.state.accessToken);
     this.setState({'displayName': profile.display_name});
+  };
+
+  parseTracks = async () => {
+    for (let i = 0; i < timeRanges.length; i++){
+      let currRange = timeRanges[i];
+      let songList = [];
+      let ids = [];
+
+      const tracks = await getTopTracks(this.state.accessToken, currRange);
+
+      for (let i = 0; i < tracks.items.length; i++){
+        let curr = tracks.items[i];
+        songList.push({
+                        name: curr.name,
+                        artists: joinArtists(curr.artists),
+                        popularity: curr.popularity,
+                        id: curr.id,
+                        link: curr.external_urls.spotify,
+                        picture: (curr.album.images.length > 0) ? curr.album.images[2].url : ''
+                      });
+        ids.push(curr.id);
+      }
+
+      let tempTracks = this.state.tracks;
+      tempTracks[currRange] = songList;
+      this.setState({'tracks': tempTracks});
+
+      let avgEnergy = 0,
+          avgTempo = 0,
+          avgValence = 0;
+
+      const analysis = await getTrackStats(this.state.accessToken, ids);
+
+      for (let j = 0; j < analysis.audio_features.length; j++){
+        let curr = analysis.audio_features[j];
+        avgEnergy += curr.energy;
+        avgTempo += curr.tempo;
+        avgValence += curr.valence;
+      }
+
+      let tempStats = this.state.stats;
+      tempStats[currRange] = {
+                                'energy': avgEnergy / 50,
+                                'tempo': avgTempo / 50,
+                                'valence': avgValence / 50
+                              };
+      this.setState({'stats': tempStats});
+    }
   }
 
-  getTracks = async (timeRange) => {
-    if (timeRange !== 'short_term' && timeRange !== 'medium_term' && timeRange !== 'long_term'){
-      console.log('Invalid time range');
-      return;
+  parseArtists = async () => {
+
+    for (let i = 0; i < timeRanges.length; i++){
+      let artistList = [];
+      let tempGenres = this.state.genres;
+      let currRange = timeRanges[i];
+      const artists = await getTopArtists(this.state.accessToken, currRange);
+
+      for (let i = 0; i < artists.items.length; i++){
+        let curr = artists.items[i];
+        artistList.push({
+                        name: curr.name,
+                        id: curr.name,
+                        popularity: curr.popularity,
+                        genres: curr.genres,
+                        link: curr.external_urls.spotify,
+                        picture: (curr.images.length > 0) ? curr.images[1].url : ''
+                      });
+        for (let j = 0; j < curr.genres.length; j++){
+          let currGenre = curr.genres[j];
+          if (currGenre in tempGenres){
+            tempGenres[currGenre]++;
+          }else{
+            tempGenres[currGenre] = 1;
+          }
+        }
+
+        let tempArtists = this.state.artists;
+        tempArtists[currRange] = artistList
+        this.setState({'artists': tempArtists});
+        this.setState({'genres': tempGenres});
+      }
+
     }
 
-    let songList = [];
-
-    const tracks = await getTopTracks(this.state.accessToken, timeRange);
-
-    for (var i = 0; i < tracks.items.length; i++){
-      let curr = tracks.items[i];
-      songList.push({
-                      name: curr.name,
-                      artists: joinArtists(curr.artists),
-                      popularity: curr.popularity,
-                      id: curr.id,
-                      link: curr.external_urls.spotify,
-                      picture: (curr.album.images.length > 0) ? curr.album.images[2].url : ''
-                    });
-    }
-
-   let tempTracks = this.state.tracks;
-   tempTracks[timeRange] = songList
-   this.setState(tempTracks);
-  }
-
-  getArtists = async (timeRange) => {
-    if (timeRange !== 'short_term' && timeRange !== 'medium_term' && timeRange !== 'long_term'){
-      console.log('Invalid time range');
-      return;
-    }
-
-    let artistList = [];
-
-    const artists = await getTopArtists(this.state.accessToken, timeRange);
-
-    for (var i = 0; i < artists.items.length; i++){
-      let curr = artists.items[i];
-      artistList.push({
-                      name: curr.name,
-                      id: curr.name,
-                      popularity: curr.popularity,
-                      genres: curr.genres,
-                      link: curr.external_urls.spotify,
-                      picture: (curr.images.length > 0) ? curr.images[1].url : ''
-                    });
-    }
-
-   let tempArtists = this.state.artists;
-   tempArtists[timeRange] = artistList
-   this.setState(tempArtists);
   }
 
   trackSwitch(e){
@@ -146,15 +235,26 @@ class Dashboard extends React.Component {
     //set new highlighted class
     e.target.setAttribute('class', 'topBarSelected');
 
-    if (selectedMode === 'tracks'){
-      document.getElementsByClassName('trackSection')[0].style.display = 'block';
-      document.getElementsByClassName('artistSection')[0].style.display = 'none';
-    }else{
-      document.getElementsByClassName('artistSection')[0].style.display = 'block';
-      document.getElementsByClassName('trackSection')[0].style.display = 'none';
-    }
 
-    this.setState({ 'currTopBar': selectedMode });
+    if (selectedMode === 'tracks'){
+      this.setState({
+                      'trackSection': {display: 'block'},
+                      'artistSection': {display: 'none'},
+                      'statSection': {display: 'none'}
+                    });
+    }else if (selectedMode === 'artists'){
+      this.setState({
+                      'trackSection': {display: 'none'},
+                      'artistSection': {display: 'block'},
+                      'statSection': {display: 'none'}
+                    });
+    }else {
+      this.setState({
+                      'trackSection': {display: 'none'},
+                      'artistSection': {display: 'none'},
+                      'statSection': {display: 'block'}
+                    });
+    }
   }
 
   render(){
@@ -194,19 +294,23 @@ class Dashboard extends React.Component {
           <a href={getAuthURL()}>
             <div className='spotifyAuth'>Get Spotify Stats</div>
           </a>
+          <p id='loading' className='fadeInOut' style={this.state.loading}>Loading...</p>
         </div>
         <div className='fade' id='app'  style={this.state.app}>
           <div className='topBarSection'>
             <div className='topBarTitle'><h3>Spotify Statistics for {this.state.displayName}</h3></div>
-            <a  href='/#' value='tracks' onClick={this.topBarSwitch.bind(this)}>
+            <a href='/#' value='tracks' onClick={this.topBarSwitch.bind(this)}>
                 <div className='topBarSelected'>Tracks</div>
             </a>
-            <a  href='/#' value='artists' onClick={this.topBarSwitch.bind(this)}>
+            <a href='/#' value='artists' onClick={this.topBarSwitch.bind(this)}>
               <div className='topBar'>Artists</div>
             </a>
+            <a href='/#' value='stats' onClick={this.topBarSwitch.bind(this)}>
+              <div className='topBar'>Stats</div>
+            </a>
           </div>
-          <div className='trackSection'>
-            <div className='trackHeaderDiv'>
+          <div className='trackSection' style={this.state.trackSection}>
+            <div className='sectionHeaderDiv'>
               <h2>Top Tracks</h2>
             </div>
             <div className='timeRangeTrackDiv'>
@@ -227,8 +331,8 @@ class Dashboard extends React.Component {
             </div>
           </div>
 
-          <div className='artistSection'>
-            <div className='artistHeaderDiv'>
+          <div className='artistSection' style={this.state.artistSection}>
+            <div className='sectionHeaderDiv'>
               <h2>Top Artists</h2>
             </div>
             <div className='timeRangeArtistDiv'>
@@ -246,6 +350,14 @@ class Dashboard extends React.Component {
               <div>
                 <Artists artists={this.state.artists[this.state.currArtistTimeRange]} />
               </div>
+            </div>
+          </div>
+          <div className='statSection' style={this.state.statSection}>
+            <div className='sectionHeaderDiv'>
+              <h2>Your Statistics</h2>
+            </div>
+            <div className='statContainer'>
+              <canvas id="genreChart"></canvas>
             </div>
           </div>
         </div>

@@ -49,4 +49,20 @@ const getUserProfile = (token) => {
   return request.get(options);
 }
 
-export {getTopTracks, getTopArtists, getUserProfile};
+const getTrackStats = (token, ids) => {
+  const queryURL = querystring.stringify({
+   ids: ids.join()
+  });
+
+  let options = {
+    uri: 'https://api.spotify.com/v1/audio-features/?' + queryURL,
+    headers: {
+      'Authorization': 'Bearer ' + token
+    },
+    json: true
+  };
+
+  return request.get(options)
+}
+
+export {getTopTracks, getTopArtists, getUserProfile, getTrackStats};

@@ -43,4 +43,13 @@ const getAccessToken = (uri) => {
                 accessTokenField.length, uri.indexOf(tokenTypeField));
 }
 
-export {joinArtists, getAccessToken, getAuthURL, generateRandomString};
+const getRandomRGB = (n) => {
+  let rgb = [];
+  for (let i = 0; i < n; i++){
+    rgb.push(`rgba(${Math.random() * 255}, ${Math.random() * 255}, ${Math.random() * 255}, 1)`);
+  }
+
+  return rgb;
+}
+
+export {joinArtists, getAccessToken, getAuthURL, generateRandomString, getRandomRGB};
