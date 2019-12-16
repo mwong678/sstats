@@ -267,8 +267,38 @@ a {
 /*                   START STATS                  */
 .statSection {
   display: none;
+  margin: 0 auto;
 }
 
+.statTitle {
+  text-align: left;
+  font-size: 18px;
+}
+
+.statBlock {
+  display:inline-block;
+  width: 33%;
+}
+
+.statHeader {
+  color: #FFFFFF;
+  font-size: 36px;
+}
+
+#energyStat {
+  background-color: #68B15D;
+  color: #FFFFFF;
+}
+
+#valenceStat {
+  background-color: #DFBB50;
+  color: #FFFFFF;
+}
+
+#tempoStat {
+  background-color: #BC4A3E;
+  color: #FFFFFF;
+}
 /*                   END STATS                  */
 
 /* MOBILE */

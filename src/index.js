@@ -64,18 +64,20 @@ class Dashboard extends React.Component {
       this.userProfile();
       await this.parseArtists();
       await this.parseTracks();
-      this.initGenreChart(5);
+      this.initGenreChart();
       this.setState({ 'welcome': {display: 'none'}, 'app': {display: 'block'}});
     }else{
       this.setState({ 'welcome': {display: 'block'}, 'app': {display: 'none'}});
     }
   }
 
-  initGenreChart = (n) => {
-    let rgba = getRandomRGB(n),
-        topGenres = this.getTopGenres(5),
+  initGenreChart = () => {
+    let n = Math.floor(Object.keys(this.state.genres).length * .09),
+        rgba = getRandomRGB(n),
+        topGenres = this.getTopGenres(n),
         genreNames = topGenres.map(g => g[0]),
         genreValues = topGenres.map(g => g[1]);
+
     let genreChart = new Chart(document.getElementById('genreChart'), {
         type: 'horizontalBar',
         data: {
@@ -84,7 +86,8 @@ class Dashboard extends React.Component {
               data: genreValues,
               backgroundColor: rgba,
               borderColor: rgba,
-              borderWidth: 1
+              borderWidth: 1,
+              barPercentage: .5
           }]
       },
       options: {
@@ -152,13 +155,14 @@ class Dashboard extends React.Component {
         avgEnergy += curr.energy;
         avgTempo += curr.tempo;
         avgValence += curr.valence;
+        console.log(tracks.items[j].name + ': ' + curr.valence);
       }
 
       let tempStats = this.state.stats;
       tempStats[currRange] = {
-                                'energy': avgEnergy / 50,
+                                'energy': (avgEnergy / 50) * 100,
                                 'tempo': avgTempo / 50,
-                                'valence': avgValence / 50
+                                'valence': (avgValence / 50) * 100
                               };
       this.setState({'stats': tempStats});
     }
@@ -357,7 +361,12 @@ class Dashboard extends React.Component {
               <h2>Your Statistics</h2>
             </div>
             <div className='statContainer'>
+              <p className='statTitle'>Top Genres</p>
               <canvas id="genreChart"></canvas>
+              <p className='statTitle'>Other Stats</p>
+              <div className='statBlock' id="energyStat"><p className='statHeader'>Energy</p>{this.state.stats.short_term.energy}</div>
+              <div className='statBlock' id="tempoStat"><p className='statHeader'>BPM</p>{this.state.stats.short_term.tempo}</div>
+              <div className='statBlock' id="valenceStat"><p className='statHeader'>Happiness</p>{this.state.stats.short_term.valence}</div>
             </div>
           </div>
         </div>
