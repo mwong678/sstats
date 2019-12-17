@@ -71,6 +71,7 @@ a {
   display: inline-block;
   padding: 5px;
   width: 13%;
+  vertical-align: middle;
 }
 
 .topBar:hover {
@@ -276,8 +277,9 @@ a {
 }
 
 .statBlock {
-  display:inline-block;
+  display: inline-block;
   width: 33%;
+  padding-bottom: 20px;
 }
 
 .statHeader {
@@ -334,4 +336,9 @@ a {
     font-size: 14px;
   }
    /*                   END ARTISTS                  */
+
+   .statHeader {
+     color: #FFFFFF;
+     font-size: 20px;
+   }
 }

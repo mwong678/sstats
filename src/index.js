@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import Chart from 'chart.js';
 import './styles.css';
 import {getTopTracks, getTopArtists, getUserProfile, getTrackStats} from './spotify'
-import {joinArtists, getAccessToken, getAuthURL, getRandomRGB} from './util'
+import {joinArtists, getAccessToken, getAuthURL, getRandomRGB, generateAnalysis} from './util'
 
 const rootElement = document.getElementById('root'),
       timeRanges = ['short_term', 'medium_term', 'long_term'];
@@ -65,6 +65,7 @@ class Dashboard extends React.Component {
       await this.parseArtists();
       await this.parseTracks();
       this.initGenreChart();
+
       this.setState({ 'welcome': {display: 'none'}, 'app': {display: 'block'}});
     }else{
       this.setState({ 'welcome': {display: 'block'}, 'app': {display: 'none'}});
@@ -155,14 +156,14 @@ class Dashboard extends React.Component {
         avgEnergy += curr.energy;
         avgTempo += curr.tempo;
         avgValence += curr.valence;
-        console.log(tracks.items[j].name + ': ' + curr.valence);
+        //console.log(tracks.items[j].name + ': ' + curr.valence);
       }
 
       let tempStats = this.state.stats;
       tempStats[currRange] = {
-                                'energy': (avgEnergy / 50) * 100,
-                                'tempo': avgTempo / 50,
-                                'valence': (avgValence / 50) * 100
+                                'energy': Math.round((avgEnergy / 50) * 100),
+                                'tempo': Math.round(avgTempo / 50),
+                                'valence': Math.round((avgValence / 50) * 100)
                               };
       this.setState({'stats': tempStats});
     }
@@ -363,10 +364,29 @@ class Dashboard extends React.Component {
             <div className='statContainer'>
               <p className='statTitle'>Top Genres</p>
               <canvas id="genreChart"></canvas>
+              <div className='chartAnalysis'>
+                <p className='analysisMessageChart'>
+                  {`You've listened to ${Object.keys(this.state.genres).length} different genres`}
+                </p>
+              </div>
               <p className='statTitle'>Other Stats</p>
-              <div className='statBlock' id="energyStat"><p className='statHeader'>Energy</p>{this.state.stats.short_term.energy}</div>
-              <div className='statBlock' id="tempoStat"><p className='statHeader'>BPM</p>{this.state.stats.short_term.tempo}</div>
-              <div className='statBlock' id="valenceStat"><p className='statHeader'>Happiness</p>{this.state.stats.short_term.valence}</div>
+              <div className='statAnalysis'>
+                <p className='analysisMessage'>
+                  {generateAnalysis(this.state.stats.medium_term.energy, this.state.stats.medium_term.valence)}
+                </p>
+              </div>
+              <div className='statBlock' id="tempoStat">
+                <p className='statHeader'>BPM</p>
+                {this.state.stats.long_term.tempo}
+              </div>
+              <div className='statBlock' id="energyStat">
+                <p className='statHeader'>Energy</p>
+                {this.state.stats.long_term.energy}%
+              </div>
+              <div className='statBlock' id="valenceStat">
+                <p className='statHeader'>Mood</p>
+                {this.state.stats.long_term.valence}%
+              </div>
             </div>
           </div>
         </div>

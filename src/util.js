@@ -52,4 +52,35 @@ const getRandomRGB = (n) => {
   return rgb;
 }
 
-export {joinArtists, getAccessToken, getAuthURL, generateRandomString, getRandomRGB};
+const generateAnalysis = (energy, valence) => {
+  let energyMessage = '',
+      valenceMessage = '';
+
+  if (energy > 66){
+    energyMessage = 'you listen to higher energy songs';
+  }else if (energy > 33){
+    energyMessage = 'you listen to medium energy songs';
+  }else{
+    energyMessage = 'you listen to lower energy songs';
+  }
+
+  if (valence > 60){
+    valenceMessage = 'you listen to more positive songs';
+  }else if (valence > 40){
+    valenceMessage = 'you listen to a mix of positive and negative songs';
+  }else{
+    valenceMessage = 'you listen to more negative songs';
+  }
+
+
+  return `Based on your listening habits, ${energyMessage}, and ${valenceMessage}`;
+}
+
+export {
+          joinArtists,
+          getAccessToken,
+          getAuthURL,
+          generateRandomString,
+          getRandomRGB,
+          generateAnalysis
+        };
