@@ -71,7 +71,6 @@ a {
   display: inline-block;
   padding: 5px;
   width: 13%;
-  vertical-align: middle;
 }
 
 .topBar:hover {
@@ -92,6 +91,14 @@ a {
 .topBarSection {
   background-color: #EEEEEE;
   font-weight: 100;
+}
+
+.analysisMessage{
+  font-size: 20px;
+}
+
+.analysisMessageChart{
+  font-size: 26px;
 }
 
 @-webkit-keyframes fade {
@@ -273,7 +280,8 @@ a {
 
 .statTitle {
   text-align: left;
-  font-size: 18px;
+  font-size: 28px;
+  font-weight: 700;
 }
 
 .statBlock {
@@ -340,5 +348,13 @@ a {
    .statHeader {
      color: #FFFFFF;
      font-size: 20px;
+   }
+
+   .analysisMessage{
+     font-size: 16px;
+   }
+
+   .analysisMessageChart{
+     font-size: 16px;
    }
 }
