@@ -1,7 +1,7 @@
 const querystring = require('querystring'),
       clientID = process.env.REACT_APP_CLIENT_ID,
       redirectURI = process.env.REACT_APP_REDIRECT_URI,
-      scope = 'user-top-read user-read-email',
+      scope = 'user-top-read user-read-email playlist-modify-public',
       accessTokenField = 'access_token=',
       tokenTypeField = '&token_type';
 

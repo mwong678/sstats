@@ -65,4 +65,41 @@ const getTrackStats = (token, ids) => {
   return request.get(options)
 }
 
-export {getTopTracks, getTopArtists, getUserProfile, getTrackStats};
+const generatePlaylist = async (token, userId, name, description, uris) => {
+  const playlistResult = await createPlaylist(token, userId, name, description);
+  const playlistID = playlistResult.id;
+  return addTracks(token, playlistID, uris);
+}
+
+const createPlaylist = (token, userId, name, description) => {
+  let options = {
+    uri: 'https://api.spotify.com/v1/users/' + userId + '/playlists',
+    body:{
+      name: name,
+      description: description
+    },
+    headers: {
+      'Authorization': 'Bearer ' + token
+    },
+    json: true
+  };
+
+  return request.post(options);
+}
+
+const addTracks = (token, playlistID, uris) => {
+  let options = {
+    uri: 'https://api.spotify.com/v1/playlists/' + playlistID + '/tracks',
+    body:{
+      uris: uris
+    },
+    headers: {
+      'Authorization': 'Bearer ' + token
+    },
+    json: true
+  };
+
+  return request.post(options);
+}
+
+export {getTopTracks, getTopArtists, getUserProfile, getTrackStats, generatePlaylist};
